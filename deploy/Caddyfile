@@ -1,0 +1,17 @@
+# Caddy reverse proxy for Crag Offline: automatic HTTPS + a password.
+#
+# 1. Replace crag.example.com with your domain (an A record pointing at this VM).
+#    No domain? Use sslip.io: for VM IP 203.0.113.7 use 203-0-113-7.sslip.io
+# 2. Replace the hash below:  caddy hash-password --plaintext 'your-password'
+# 3. sudo cp deploy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+
+crag.example.com {
+	encode gzip
+
+	basic_auth {
+		# username  password-hash
+		climber REPLACE_WITH_OUTPUT_OF_caddy_hash-password
+	}
+
+	reverse_proxy 127.0.0.1:8000
+}

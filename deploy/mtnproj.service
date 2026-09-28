@@ -1,0 +1,22 @@
+# systemd unit: keeps the app running and restarts it after crashes / reboots.
+#
+# Assumes the repo is cloned to /opt/mtn-project with a virtualenv in .venv and
+# runs as a "mtnproj" user. Adjust User / paths if yours differ, then:
+#   sudo cp deploy/mtnproj.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now mtnproj
+
+[Unit]
+Description=Crag Offline (Mountain Project offline guidebook)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=mtnproj
+WorkingDirectory=/opt/mtn-project
+# Listens on localhost only; Caddy handles HTTPS + the password.
+ExecStart=/opt/mtn-project/.venv/bin/python -m mtnproj --data /opt/mtn-project/data serve --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -101,6 +101,54 @@ your phone and choose **Add to Home Screen**. Then open each area you want and t
 **Save to device**. Keep the site private (for example, an unlisted URL or a password-protected
 host). It contains other people's Mountain Project content, meant for your own use.
 
+## Run it on a cloud VM (recommended)
+
+A VM gives you one always-on HTTPS address. Downloads run there, and your phone installs the
+app from it and saves areas for offline use. You don't need a static export.
+
+> ⚠️ Never expose `mtnproj serve` directly to the internet. It has no login of its own, and
+> anyone could start downloads or delete your library. Always put it behind Caddy as below.
+
+On an Ubuntu/Debian VM, you need a domain (or sslip.io) pointing at the VM, with ports 80
+and 443 open:
+
+```bash
+# 1. App + dependencies
+sudo apt update && sudo apt install -y git python3-venv caddy
+sudo useradd --system --no-create-home --shell /usr/sbin/nologin mtnproj
+sudo git clone https://github.com/soulstce/Mtn-Project.git /opt/mtn-project
+sudo chown -R mtnproj: /opt/mtn-project
+sudo -u mtnproj python3 -m venv /opt/mtn-project/.venv
+sudo -u mtnproj /opt/mtn-project/.venv/bin/pip install -r /opt/mtn-project/requirements.txt
+
+# 2. Keep it running (listens on 127.0.0.1:8000 only)
+sudo cp /opt/mtn-project/deploy/mtnproj.service /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now mtnproj
+curl -s http://127.0.0.1:8000/api/status.json    # → {"mode":"server",...}
+
+# 3. HTTPS + password in front of it
+caddy hash-password --plaintext 'choose-a-password'   # copy the hash it prints
+sudo cp /opt/mtn-project/deploy/Caddyfile /etc/caddy/Caddyfile
+sudo nano /etc/caddy/Caddyfile      # set your domain + paste the hash
+sudo systemctl reload caddy
+```
+
+Open `https://your-domain` and log in as `climber` with your password. Then:
+
+- **Get a crag:** use **Discover** to download it.
+- **Install on your phone:** open the same URL and choose **Add to Home Screen**.
+- **Take it offline:** tap **Save to device** on each area you'll climb.
+
+To update later:
+
+```bash
+cd /opt/mtn-project && sudo -u mtnproj git pull \
+  && sudo -u mtnproj .venv/bin/pip install -r requirements.txt \
+  && sudo systemctl restart mtnproj
+```
+
+Your library lives in `/opt/mtn-project/data`. Back up that folder if you care about it.
+
 ## Project layout
 
 ```
