@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd agent: starts Crag Offline at login and restarts it if it stops.
+  /Users/YOU is replaced with your home folder by the install command in the README.
+  Listens on localhost only; `tailscale serve` provides the HTTPS address.
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.cragoffline.server</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/YOU/Mtn-Project/.venv/bin/python</string>
+		<string>-m</string>
+		<string>mtnproj</string>
+		<string>--data</string>
+		<string>/Users/YOU/Mtn-Project/data</string>
+		<string>serve</string>
+		<string>--host</string>
+		<string>127.0.0.1</string>
+		<string>--port</string>
+		<string>8000</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/Users/YOU/Mtn-Project</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>/Users/YOU/Mtn-Project/server.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/YOU/Mtn-Project/server.log</string>
+</dict>
+</plist>

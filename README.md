@@ -101,7 +101,69 @@ your phone and choose **Add to Home Screen**. Then open each area you want and t
 **Save to device**. Keep the site private (for example, an unlisted URL or a password-protected
 host). It contains other people's Mountain Project content, meant for your own use.
 
-## Run it on a cloud VM (recommended)
+## Run it on a Mac at home (recommended)
+
+This works on any always-on Mac, including an older Intel Mac mini on macOS 12 Monterey.
+[Tailscale](https://tailscale.com) gives the Mac a private HTTPS address that only your own
+devices can reach, from anywhere. That's what lets your phone save areas for offline use.
+You don't need a domain, a password setup, or open router ports.
+
+1. **Install Python 3.12** with the macOS installer from
+   [python.org/downloads/macos](https://www.python.org/downloads/macos/). The `python3` that
+   ships with Monterey is 3.8, which is too old.
+2. **Install the app**, in Terminal:
+
+   ```bash
+   cd ~
+   git clone https://github.com/soulstce/Mtn-Project.git
+   cd Mtn-Project
+   python3.12 -m venv .venv
+   .venv/bin/pip install -r requirements.txt
+   ```
+
+3. **Start it automatically** at login and keep it running:
+
+   ```bash
+   sed "s|/Users/YOU|$HOME|g" deploy/com.cragoffline.server.plist \
+     > ~/Library/LaunchAgents/com.cragoffline.server.plist
+   launchctl load ~/Library/LaunchAgents/com.cragoffline.server.plist
+   curl -s http://127.0.0.1:8000/api/status.json   # → {"mode":"server",...}
+   ```
+
+   Also set the Mac to never sleep: System Preferences → Energy Saver →
+   *Prevent computer from sleeping automatically*. If it reboots, turn on automatic login
+   (Users & Groups → Login Options) so the app comes back by itself.
+
+4. **Give it an HTTPS address with Tailscale.**
+   - Install Tailscale on the Mac and on your phone, and sign in to both with the same account.
+   - In the [Tailscale admin console](https://login.tailscale.com/admin/dns), turn on
+     **MagicDNS** and **HTTPS Certificates**.
+   - On the Mac, run:
+
+   ```bash
+   tailscale serve --bg 8000
+   # If `tailscale` isn't found, use the app's built-in CLI:
+   # /Applications/Tailscale.app/Contents/MacOS/Tailscale serve --bg 8000
+   ```
+
+   It prints an address like `https://mac-mini.your-tailnet.ts.net`.
+
+5. **Use it.**
+   - Open that address in a browser to download areas from **Discover**.
+   - On your phone, open the same address and choose **Add to Home Screen**.
+   - Tap **Save to device** on each area you'll climb. Saved areas work with no signal at all.
+
+To update later:
+
+```bash
+cd ~/Mtn-Project && git pull && .venv/bin/pip install -r requirements.txt \
+  && launchctl kickstart -k gui/$(id -u)/com.cragoffline.server
+```
+
+Logs go to `~/Mtn-Project/server.log`. Your library is in `~/Mtn-Project/data`, so include
+it in your Time Machine backups.
+
+## Run it on a cloud VM
 
 A VM gives you one always-on HTTPS address. Downloads run there, and your phone installs the
 app from it and saves areas for offline use. You don't need a static export.
