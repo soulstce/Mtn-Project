@@ -1,0 +1,25 @@
+[project]
+name = "mtnproj"
+version = "0.1.0"
+description = "Download Mountain Project areas, routes and photos into an offline climbing guidebook app"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27"]
+
+[project.scripts]
+mtnproj = "mtnproj.__main__:main"
+
+[tool.setuptools]
+packages = ["mtnproj"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

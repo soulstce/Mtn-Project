@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Crag Offline</title>
+  <meta name="description" content="Offline climbing guidebook built from Mountain Project">
+  <meta name="theme-color" content="#1f2a24" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Crag">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="#/">
+        <img src="icons/icon.svg" alt="" width="28" height="28">
+        <span>Crag Offline</span>
+      </a>
+      <a class="nav-item" data-nav="library" href="#/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20 9.5 8l4 7 2.5-4L21 20z"/></svg>
+        <span>Library</span>
+      </a>
+      <a class="nav-item" data-nav="search" href="#/search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span>Search</span>
+      </a>
+      <a class="nav-item server-only" data-nav="discover" href="#/discover">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>
+        <span>Discover</span>
+      </a>
+      <a class="nav-item" data-nav="ticks" href="#/ticks">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+        <span>Ticks</span>
+      </a>
+      <a class="nav-item server-only" data-nav="downloads" href="#/downloads">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg>
+        <span>Downloads</span>
+        <i class="nav-badge" id="dl-badge" hidden></i>
+      </a>
+      <a class="nav-item" data-nav="settings" href="#/settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3m0 13v3m9.5-9.5h-3m-13 0h-3m16.2-6.7-2.1 2.1M7.4 16.6l-2.1 2.1m13.4 0-2.1-2.1M7.4 7.4 5.3 5.3"/></svg>
+        <span>Settings</span>
+      </a>
+      <div class="nav-status" id="conn-status"></div>
+    </nav>
+    <main id="view" class="view" tabindex="-1"></main>
+  </div>
+  <div id="lightbox" class="lightbox" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
