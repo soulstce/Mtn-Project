@@ -1,0 +1,12 @@
+# Downloaded library (scraped content + photos) and static exports
+data/
+site/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.DS_Store
+server.log
